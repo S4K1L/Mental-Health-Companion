@@ -104,16 +104,16 @@ class _LoginPageState extends State<LoginPage> {
       child: Obx(
         () => FilledButton(
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(
+            backgroundColor: MaterialStateProperty.all(
               Colors.blue[600],
             ),
-            shape: WidgetStateProperty.all(
+            shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),
-          onPressed: () => loginController.loginUser,
+          onPressed: () => loginController.loginUser(),
           child: loginController.waitingFirebaseResponse.value == false
               ? Text(
                   "Login",
