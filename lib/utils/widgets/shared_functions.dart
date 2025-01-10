@@ -56,8 +56,8 @@ Widget buildLoginByDifferentKey(String logoPath, String label, Color fillColor,
         ],
       ),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(fillColor),
-        shape: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(fillColor),
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             side: haveBorder == true
                 ? const BorderSide(color: Colors.black)

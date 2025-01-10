@@ -3,9 +3,9 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'authentication/auth.dart';
+import 'package:mentalhealth/utils/constants/colors.dart';
 import 'authentication/login.dart';
 
 class ChattingScreen extends StatefulWidget {
@@ -25,11 +25,16 @@ class _ChattingScreenState extends State<ChattingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackGroundColor,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 182, 166, 119),
+        backgroundColor: kBackGroundColor,
         centerTitle: true,
+        automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Get.back();
+        }, icon: const Icon(Icons.arrow_back_ios_new)),
         title: const Text(
-          "Ease Talk",
+          "Let's Talk",
           style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
         ),
       ),
@@ -105,14 +110,5 @@ class _ChattingScreenState extends State<ChattingScreen> {
       );
       _sendMessage(chatMessage);
     }
-  }
-
-  void openSignInPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
-
-    Auth.signOut();
   }
 }

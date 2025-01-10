@@ -1,19 +1,15 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:mentalhealth/controller/login_controller.dart';
+import 'package:mentalhealth/utils/constants/colors.dart';
+import 'package:mentalhealth/utils/constants/const.dart';
 import 'package:mentalhealth/utils/widgets/password_text_field.dart';
 import 'package:mentalhealth/utils/widgets/shared_functions.dart';
 import 'package:mentalhealth/utils/widgets/text_text_field.dart';
-import 'package:mentalhealth/views/authentication/signup.dart';
 import 'package:mentalhealth/views/chatbot.dart';
-
-import 'auth.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,87 +19,64 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final LoginController loginController = Get.put(LoginController());
   late Size screenSize;
-  bool _rememberMe = false;
-
-  bool _waitingFirebaseResponse = false;
-  final _formKey = GlobalKey<FormState>();
-  final _emailKey = GlobalKey<TextTextFieldState>();
-  final _passwordKey = GlobalKey<PasswordTextFieldState>();
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Color(0xFFFAF3E0),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(height: screenSize.height * 0.1),
-              // Build welcome title
-              buildWelcomeTitle(),
-              SizedBox(height: screenSize.height * 0.025),
-              // Build the body of the form
-              Column(
-                children: [
-                  // Build TextFields to get input of login credentials
-                  // Use %35 of the screen size
-                  SizedBox(
-                    height: screenSize.height * 0.35,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildEmailField(),
-                          buildPasswordField(),
-
-                          // Build remember me checkbox and password reset
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: kBackGroundColor,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: IntrinsicHeight(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 30),
+                      Image.asset(
+                        logo,
+                        height: 250,
+                      ),
+                      buildWelcomeTitle(),
+                      SizedBox(height: screenSize.height * 0.025),
+                      Expanded(
+                        child: Form(
+                          key: loginController.formKey,
+                          child: Column(
                             children: [
-                              buildRememberMe(),
-                              buildForgotPassword(),
+                              buildEmailField(),
+                              SizedBox(height: screenSize.height * 0.035),
+                              buildPasswordField(),
+                              SizedBox(height: screenSize.height * 0.015),
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  buildForgotPassword(),
+                                ],
+                              ),
+                              SizedBox(height: screenSize.height * 0.015),
+                              buildLoginButton(context),
+                              SizedBox(height: screenSize.height * 0.035),
+                              buildOrWithSection(),
+                              SizedBox(height: screenSize.height * 0.015),
+                              buildSingUpSection(),
                             ],
                           ),
-
-                          // Build login button
-                          buildLoginButton(),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-
-                  // Put some space so it'll look better
-                  SizedBox(height: screenSize.height * 0.15),
-
-                  buildOrWithSection(),
-
-                  SizedBox(height: screenSize.height * 0.025),
-
-                  // Build other login types
-                  SizedBox(
-                    height: screenSize.height * 0.18,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Build SingUp
-                        buildSingUpSection(),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -124,53 +97,40 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildLoginButton() {
+  Widget buildLoginButton(BuildContext context) {
     return SizedBox(
       width: screenSize.width * 0.9,
       height: 50,
-      child: FilledButton(
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(
-            Colors.blue[600],
-          ),
-          shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      child: Obx(
+        () => FilledButton(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(
+              Colors.blue[600],
+            ),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
+          onPressed: () => loginController.loginUser,
+          child: loginController.waitingFirebaseResponse.value == false
+              ? Text(
+                  "Login",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                )
+              : LoadingAnimationWidget.inkDrop(color: Colors.white, size: 30),
         ),
-        onPressed: login,
-        child: _waitingFirebaseResponse == false
-            ? Text(
-          "Login",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        )
-            : LoadingAnimationWidget.inkDrop(color: Colors.white, size: 30),
       ),
-    );
-  }
-
-  Row buildRememberMe() {
-    return Row(
-      children: [
-        Text(
-          "Remember me",
-          style: TextStyle(fontSize: 16),
-        ),
-        Checkbox(
-          value: _rememberMe,
-          onChanged: updateRememberMeValue,
-        )
-      ],
     );
   }
 
   TextButton buildForgotPassword() {
     return TextButton(
-      onPressed: forgotPassword,
+      onPressed: () {},
       child: Text(
         "Forgot your password?",
         style: TextStyle(
@@ -191,12 +151,11 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontSize: 16),
           ),
           TextTextField(
-            key: _emailKey,
-            controller: _emailController,
-            hintText: "Enter Email",
+            key: loginController.emailKey,
+            controller: loginController.emailController,
+            hintText: "Enter email",
             inputCheck: checkEmail,
           ),
-          // createTextField(hint, secure),
         ],
       ),
     );
@@ -212,11 +171,10 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontSize: 16),
           ),
           PasswordTextField(
-            key: _passwordKey,
-            controller: _passwordController,
+            key: loginController.passwordKey,
+            controller: loginController.passwordController,
             hintText: "Enter password",
           ),
-          // createTextField(hint, secure),
         ],
       ),
     );
@@ -234,106 +192,15 @@ class _LoginPageState extends State<LoginPage> {
           TextSpan(
             text: "Sign up",
             style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-            recognizer: TapGestureRecognizer()..onTap = openSignUpPage,
+            recognizer: TapGestureRecognizer()
+              ..onTap = loginController.openSignUpPage,
           ),
         ],
       ),
     );
   }
-  // Build functions
-
-  // Other functions
-  Future<void> login() async {
-    FocusScope.of(context).unfocus();
-
-    if (!_formKey.currentState!.validate()) return;
-
-    bool error = false;
-    _waitingFirebaseResponse = true;
-
-    try {
-      await Auth.signInWithEmailAndPassword(
-          _emailController.text, _passwordController.text);
-    } on FirebaseAuthException catch (e) {
-      error = true;
-      String errorCode = e.code;
-      if (errorCode == "invalid-credential") {
-        showFailureSnackBar("Invalid credentials",
-            "Wrong email or password, please try again!");
-
-        setState(() {
-          _emailKey.currentState!.errorText = "";
-          _passwordKey.currentState!.errorText = "";
-        });
-      }
-    }
-
-    _waitingFirebaseResponse = false;
-    if (!error) openMainPage();
-  }
 
   void openMainPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ChattingScreen()),
-    );
-  }
-
-  void showFailureSnackBar(String errorTitle, String errorMessage) {
-    var snackBar = SnackBar(
-      duration: Duration(seconds: 3),
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: errorTitle,
-        message: errorMessage,
-        contentType: ContentType.failure,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void showSuccessSnackBar(String successTitle, String successMessage) {
-    var snackBar = SnackBar(
-      duration: Duration(seconds: 2),
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: successTitle,
-        message: successMessage,
-        contentType: ContentType.success,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void forgotPassword() {
-    String email = _emailController.text;
-    if (EmailValidator.validate(email)) {
-      showSuccessSnackBar("Password reset code sent",
-          "We sent a link to your email to reset your password.");
-    } else {
-      showFailureSnackBar("Enter your mail",
-          "You have to enter a mail to get a password reset code.");
-    }
-  }
-
-  void updateRememberMeValue(bool? value) {
-    setState(() {
-      _rememberMe = !_rememberMe;
-    });
-  }
-
-  void openSignUpPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RegisterPage(),
-      ),
-    );
+    Get.to(() => ChattingScreen());
   }
 }

@@ -15,8 +15,12 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   get:
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
+  local_auth: ^2.3.0
+  firebase_core: ^3.5.0
+  firebase_auth: ^5.3.0
+  cloud_firestore: ^5.4.2
+  firebase_storage: ^12.3.1
+  flutter_screenutil:
   email_validator: ^2.1.17
   loading_animation_widget: ^1.2.0+4
   awesome_snackbar_content: ^0.1.3

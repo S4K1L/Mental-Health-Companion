@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhealth/utils/components/old_button.dart';
+import 'package:mentalhealth/utils/constants/colors.dart';
 import 'package:mentalhealth/views/authentication/login.dart';
 import 'package:mentalhealth/views/authentication/signup.dart';
 
@@ -11,7 +13,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: const Color(0xFFFAF3E0),
+          color: kBackGroundColor,
           height: size.height,
           width: size.width,
           child: Stack(
@@ -69,79 +71,23 @@ class WelcomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Row(
                           children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const RegisterPage(),
-                                    ),
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                  WidgetStateProperty.all<Color>(
-                                      Colors.white),
-                                  padding: WidgetStateProperty.all<
-                                      EdgeInsetsGeometry>(
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                  ),
-                                  shape: WidgetStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  textStyle:
-                                  WidgetStateProperty.all<TextStyle>(
-                                    const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
+                            OldButton(title: "Register", onPress: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
                                 ),
-                                child: const Text("Register"),
-                              ),
-                            ),
+                              );
+                            },),
                             const SizedBox(width: 20),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(),
-                                    ),
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                  WidgetStateProperty.all<Color>(
-                                      Colors.white70.withOpacity(0.9)),
-                                  padding: WidgetStateProperty.all<
-                                      EdgeInsetsGeometry>(
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                  ),
-                                  shape: WidgetStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  textStyle:
-                                  WidgetStateProperty.all<TextStyle>(
-                                    TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.black45.withOpacity(0.7),
-                                    ),
-                                  ),
+                            OldButton(title: "Sign In", onPress: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
                                 ),
-                                child: const Text("Sign In"),
-                              ),
-                            ),
+                              );
+                            },),
                           ],
                         ),
                       ),
@@ -156,3 +102,4 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
+
