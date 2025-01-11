@@ -9,6 +9,7 @@ import 'package:mentalhealth/utils/constants/const.dart';
 import 'package:mentalhealth/utils/widgets/password_text_field.dart';
 import 'package:mentalhealth/utils/widgets/shared_functions.dart';
 import 'package:mentalhealth/utils/widgets/text_text_field.dart';
+import 'package:mentalhealth/views/authentication/forget_password.dart';
 import 'package:mentalhealth/views/chatbot.dart';
 
 class LoginPage extends StatefulWidget {
@@ -114,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           onPressed: () => loginController.loginUser(),
-          child: loginController.waitingFirebaseResponse.value == false
+          child: loginController.isLoading.value == false
               ? Text(
                   "Login",
                   style: TextStyle(
@@ -130,7 +131,9 @@ class _LoginPageState extends State<LoginPage> {
 
   TextButton buildForgotPassword() {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        Get.to(()=> ResetPassword(),transition: Transition.rightToLeft);
+      },
       child: Text(
         "Forgot your password?",
         style: TextStyle(
@@ -198,9 +201,5 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
-  }
-
-  void openMainPage() {
-    Get.to(() => ChattingScreen());
   }
 }

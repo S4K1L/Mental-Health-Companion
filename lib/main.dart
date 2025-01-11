@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:mentalhealth/utils/constants/api.dart';
 import 'package:mentalhealth/views/welcome.dart';
 import 'firebase_options.dart';
+import 'views/authentication/auth.dart';
 
 void main() async {
   // Be sure all widgets are initialized
@@ -17,7 +18,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Gemini.init(
-    apiKey: GEMINI_API_KEY,
+    apiKey: API_KEY,
   );
 
   // Start the app
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const WelcomeScreen(),
+        home: const AuthGate(),
       ),
     );
   }

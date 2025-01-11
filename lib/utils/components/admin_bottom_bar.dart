@@ -3,31 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mentalhealth/utils/constants/colors.dart';
+import 'package:mentalhealth/views/Admin/admin_community.dart';
+import 'package:mentalhealth/views/Admin/admin_repository.dart';
 import 'package:mentalhealth/views/chatbot.dart';
-import 'package:mentalhealth/views/community_page.dart';
 import 'package:mentalhealth/views/profile_page.dart';
-import 'package:mentalhealth/views/repository_page.dart';
 
-class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+class AdminBottomBar extends StatefulWidget {
+  const AdminBottomBar({super.key});
 
   @override
-  State<BottomBar> createState() => _BottomBarState();
+  State<AdminBottomBar> createState() => _AdminBottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _AdminBottomBarState extends State<AdminBottomBar> {
   int indexColor = 0;
 
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
-        return const CommunityPage();
+        return const AdminCommunityPage();
       case 1:
-        return const RepositoryPage();
+        return const AdminRepositoryPage();
       case 2:
         return ProfilePage();
       default:
-        return const CommunityPage();
+        return const AdminCommunityPage();
     }
   }
 
@@ -80,7 +80,11 @@ class _BottomBarState extends State<BottomBar> {
             Get.to(()=> ChatScreen(),transition: Transition.rightToLeft);
           },
           backgroundColor: kPrimaryColor,
-          child: const Icon(Icons.chat,color: kWhiteColor,size: 30,),
+          child: Icon(
+            Icons.health_and_safety,
+            size: 30.sp,
+            color: kWhiteColor,
+          ),
         ),
       ),
     );

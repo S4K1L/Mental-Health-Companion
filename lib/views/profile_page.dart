@@ -68,13 +68,13 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 80.sp),
+                          SizedBox(height: 50.sp),
                           Text(
                             profileController.user.value.name ?? 'Not available',
                             style: TextStyle(
-                              fontSize: 22.sp,
+                              fontSize: 26.sp,
                               fontWeight: FontWeight.bold,
-                              color: kWhiteColor,
+                              color: kBlackColor,
                             ),
                           ),
                           _buildSettingTile(
@@ -85,13 +85,13 @@ class ProfilePage extends StatelessWidget {
                               await _showChangeNameDialog(context);
                             },
                           ),
-                          const Divider(),
+                          const Divider(color:kBlackColor,),
                           _buildSettingTile(
                             'Email',
                             profileController.user.value.email ?? 'Not available',
                             Icons.email,
                           ),
-                          const Divider(),
+                          const Divider(color:kBlackColor,),
                           _buildSettingTile(
                             'Change Password',
                             '',
@@ -148,7 +148,7 @@ class ProfilePage extends StatelessWidget {
                 top: 0,
                 child: CircleAvatar(
                   radius: 70.0.sp,
-                  backgroundColor: kBackGroundColor,
+                  backgroundColor: kWhiteColor,
                   child: Image.asset(user),
                 ),
               ),
