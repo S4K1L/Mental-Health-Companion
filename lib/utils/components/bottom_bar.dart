@@ -23,7 +23,7 @@ class _BottomBarState extends State<BottomBar> {
       case 0:
         return const CommunityPage();
       case 1:
-        return const RepositoryPage();
+        return RepositoryPage();
       case 2:
         return ProfilePage();
       default:

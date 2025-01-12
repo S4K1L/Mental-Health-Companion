@@ -32,6 +32,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   chat_gpt_sdk: ^3.1.4
   intl:
+  url_launcher: ^6.3.1
 
 
 

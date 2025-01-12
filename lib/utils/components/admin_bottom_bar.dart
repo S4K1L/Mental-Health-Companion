@@ -23,7 +23,7 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
       case 0:
         return const AdminCommunityPage();
       case 1:
-        return const AdminRepositoryPage();
+        return AdminRepositoryPage();
       case 2:
         return ProfilePage();
       default:
