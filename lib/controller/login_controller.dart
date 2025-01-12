@@ -16,7 +16,8 @@ class LoginController extends GetxController {
   // Controllers for input fields
   RxBool rememberMe = false.obs;
   RxBool isLoading = false.obs;
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get formKey => _formKey;
   final emailKey = GlobalKey<TextTextFieldState>();
   final passwordKey = GlobalKey<PasswordTextFieldState>();
   final emailController = TextEditingController();
@@ -103,6 +104,6 @@ class LoginController extends GetxController {
   }
 
   void openSignUpPage() {
-    Get.to(()=> const RegisterPage());
+    Get.to(()=> const RegisterPage(),transition: Transition.rightToLeft);
   }
 }

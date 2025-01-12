@@ -24,7 +24,9 @@ class ChatController extends GetxController {
     messages.add(userMessage);
 
     // Save message to Firestore
-    await _firestore.collection('users/$userUid/conversations').add(userMessage);
+    await _firestore
+        .collection('users/$userUid/conversations')
+        .add(userMessage);
 
     // Get chatbot response
     final response = await _getChatbotResponse(message);
@@ -46,28 +48,48 @@ class ChatController extends GetxController {
     const url = 'https://api.openai.com/v1/chat/completions';
 
     try {
+      print('Starting request to OpenAI API...');
+
+      // Prepare the request body
+      final requestBody = jsonEncode({
+        'model': 'gpt-4o',
+        'messages': [
+          {
+            'role': 'system',
+            'content': 'You are a mental health support assistant.'
+          },
+          {'role': 'user', 'content': message},
+        ],
+      });
+      print('Request body prepared: $requestBody');
+
+      // Make the HTTP POST request
       final response = await http.post(
         Uri.parse(url),
         headers: {
           'Authorization': 'Bearer $apiKey',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          'model': 'gpt-4.0',
-          'messages': [
-            {'role': 'system', 'content': 'You are a mental health support assistant.'},
-            {'role': 'user', 'content': message},
-          ],
-        }),
+        body: requestBody,
       );
+
+      print('Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return data['choices'][0]['message']['content'].trim();
+        print('Decoded response data: $data');
+
+        final chatbotResponse = data['choices'][0]['message']['content'].trim();
+        print('Extracted chatbot response: $chatbotResponse');
+
+        return chatbotResponse;
       } else {
+        print('Non-200 status code received: ${response.statusCode}');
         return 'Sorry, I could not process your request at the moment.';
       }
     } catch (e) {
+      print('Error occurred: $e');
       return 'Error connecting to the chatbot. Please try again later.';
     }
   }

@@ -3,10 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:mentalhealth/controller/profile_controller.dart';
 import 'package:mentalhealth/models/user_model.dart';
 import 'package:mentalhealth/utils/components/bottom_bar.dart';
 import 'package:mentalhealth/utils/constants/colors.dart';
+import 'package:mentalhealth/utils/constants/const.dart';
 import 'package:mentalhealth/utils/widgets/text_text_field.dart';
+import 'package:mentalhealth/views/authentication/login.dart';
+
+import 'login_controller.dart';
 
 class SignupController extends GetxController {
   // Controllers
@@ -110,8 +115,12 @@ class SignupController extends GetxController {
         message: 'Welcome to Mental Health Support',
       );
 
-      // Navigate to next screen
-      Get.offAll(() => const BottomBar(), transition: Transition.leftToRight);
+      // Clear form data (example assuming a controller or variable holds email and password)
+      emailController.clear();
+      passwordController.clear();
+
+      // Navigate to login page
+      logout();
     } catch (e) {
       if (kDebugMode) {
         print("Error in registering: $e");
@@ -124,6 +133,34 @@ class SignupController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+
+  Future<void> logout() async {
+    try {
+      if (_auth.currentUser != null) {
+        await _auth.signOut();
+
+        // Reset all models to their initial empty state
+        userModel.value = UserModel();
+        // Clear cache and delete UserController (if needed)
+        await Get.delete<ProfileController>();
+        await Get.delete<LoginController>();
+        await Get.delete<SignupController>();
+        // Navigate to login page
+        Get.offAll(() => const LoginPage(), transition: Transition.leftToRight);
+      } else {
+        if (kDebugMode) {
+          print("No user is currently signed in");
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error logging out: $e");
+      }
+      Get.snackbar('Error', 'An error occurred. Please try again.');
+      rethrow;
     }
   }
 

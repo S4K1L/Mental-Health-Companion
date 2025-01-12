@@ -167,10 +167,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void openSignInPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginPage(),
-        ));
+    Get.to(()=> const LoginPage(),transition: Transition.rightToLeft);
   }
 }
