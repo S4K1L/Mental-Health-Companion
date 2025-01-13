@@ -2,12 +2,11 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MentalHealthController extends GetxController {
-  // Observable lists for resources and filtered resources
   var resources = <Map<String, dynamic>>[].obs;
   var filteredResources = <Map<String, dynamic>>[].obs;
 
   // Categories for filtering
-  final categories = ["All", "Stress", "Anxiety", "Depression", "Self-care"];
+  final categories = ["All", "Stress", "Anxiety", "Depression", "Screening Tool"];
   var selectedCategory = "All".obs;
 
   @override
@@ -48,6 +47,6 @@ class MentalHealthController extends GetxController {
   // Update the selected category and filter resources accordingly
   void updateCategory(String category) {
     selectedCategory.value = category;
-    filterResources(''); // Reapply filtering when category changes
+    filterResources('');
   }
 }

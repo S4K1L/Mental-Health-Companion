@@ -9,11 +9,8 @@ import 'firebase_options.dart';
 import 'views/authentication/auth.dart';
 
 void main() async {
-  // Be sure all widgets are initialized
-  // otherwise, firebase can crash the app
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
