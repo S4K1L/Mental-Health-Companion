@@ -8,7 +8,7 @@ class AddRepositoryController extends GetxController {
   final TextEditingController linkController = TextEditingController();
   final RxString selectedCategory = "Stress".obs;
 
-  final categories = ["Stress", "Anxiety", "Depression", "Self-care"];
+  final categories = ["Stress", "Anxiety", "Depression", "Screening Tool"];
 
   Future<void> submitRepository() async {
     final title = titleController.text.trim();

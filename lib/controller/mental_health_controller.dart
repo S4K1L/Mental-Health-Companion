@@ -19,21 +19,31 @@ class MentalHealthController extends GetxController {
   void fetchResources() async {
     try {
       final snapshot = await FirebaseFirestore.instance.collection('resources').get();
+
+      // Map Firestore data to a list
       final data = snapshot.docs.map((doc) {
         return {
-          'title': doc['title'] ?? '', // Provide a default value if null
-          'details': doc['details'] ?? '', // Provide a default value if null
-          'category': doc['category'] ?? 'Unknown', // Provide a default value if null
-          'link': doc['link'] ?? '', // Fetch the link field
+          'id': doc.id, // Ensure the Firestore document ID is included
+          'title': doc['title'] ?? '', // Default value if null
+          'details': doc['details'] ?? '', // Default value if null
+          'category': doc['category'] ?? 'Unknown', // Default value if null
+          'link': doc['link'] ?? '', // Default value if null
         };
       }).toList();
 
-      resources.value = data; // Update the observable list
-      filteredResources.value = resources; // Initialize filtered resources
+      // Update resources and filteredResources with the fetched data
+      resources.assignAll(data);
+      filteredResources.assignAll(data);
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch resources: $e");
+      // Display an error message if fetching resources fails
+      Get.snackbar(
+        "Error",
+        "Failed to fetch resources: $e",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
+
 
   // Filter resources based on the query and selected category
   void filterResources(String query) {

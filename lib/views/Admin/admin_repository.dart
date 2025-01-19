@@ -88,7 +88,7 @@ class AdminRepositoryPage extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        // Confirm Deletion
+                        // Confirm deletion
                         final confirm = await showDialog<bool>(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -109,11 +109,10 @@ class AdminRepositoryPage extends StatelessWidget {
 
                         if (confirm == true) {
                           try {
-                            // Delete resource from Firestore
-                            await FirebaseFirestore.instance
-                                .collection('resources')
-                                .doc(resource['id']) // Assuming 'id' is the document ID
-                                .delete();
+                            // Use the 'id' field stored in the resource to delete the document
+                            final docId = resource['id']; // Ensure this is the correct document ID
+
+                            await FirebaseFirestore.instance.collection('resources').doc(docId).delete();
 
                             Get.snackbar(
                               'Success',
@@ -121,7 +120,7 @@ class AdminRepositoryPage extends StatelessWidget {
                               snackPosition: SnackPosition.BOTTOM,
                             );
 
-                            // Refresh the resource list
+                            // Refresh resources
                             controller.fetchResources();
                           } catch (e) {
                             Get.snackbar(
